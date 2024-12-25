@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import CssBaseline from '@mui/material/CssBaseline';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import Header from '../Header'; // Header component
-import Sidebar from '../Sidebar'; // Sidebar component
+import VerticalMenu from '../VerticalMenu'; // VerticalMenu
+import Navbar from '../Navbar';   // Navbar
 
 const drawerWidth = 240;
 
@@ -85,14 +81,12 @@ function StudentLayout({ children }) {
           >
             <MenuIcon />
           </IconButton>
-          {/* Header component */}
-          <Header />
+          <Navbar />
         </Toolbar>
       </AppBar>
-      <Sidebar open={open} handleDrawerClose={handleDrawerClose}/>
+      <VerticalMenu open={open} handleDrawerClose={handleDrawerClose}/>
       <Main open={open} className="bg-gray-100">
         <DrawerHeader />
-        {/* Nội dung chính */}
         {children}
       </Main>
     </Box>

@@ -1,92 +1,91 @@
-import React from 'react';
-import { Grid, Box, Typography, Button } from '@mui/material';
-import ProgressCard from '../../components/UI/ProgressCard';
-import Timetable from '../../components/UI/Timetable';
-import CourseCard from '../../components/UI/CourseCard';
-import HomeworkTable from '../../components/UI/HomeworkTable';
+import React, { useState } from "react";
+import { Grid, Box, Typography, Button } from "@mui/material";
+import CourseCard from "../../components/UI/CourseCard";
 
-// Sample data (Thay thế bằng data thật từ API)
-const progressData = [
-  { title: 'In Progress', percentage: 67, color: 'primary' },
-  { title: 'Completed', percentage: 67, color: 'success' },
-  { title: 'Canceled', percentage: 67, color: 'error' },
-];
-
+// Dữ liệu mẫu cho các khóa học (thay thế bằng dữ liệu thật từ API)
 const courses = [
   {
     id: 1,
-    title: 'Math class - 1',
-    teacher: 'Rora',
-    image: 'https://via.placeholder.com/300x200?text=Math', // Replace with actual image paths
+    title: "Math class - 1",
+    teacher: "Rora",
+    image: "/math.png", // Thay bằng ảnh thật
   },
   {
     id: 2,
-    title: 'Math class - 2',
-    teacher: 'Joy',
-    image: 'https://via.placeholder.com/300x200?text=Math', // Replace with actual image paths
+    title: "Physic class - 1",
+    teacher: "John Doe",
+    image: "/physic.png", // Thay bằng ảnh thật
   },
-  // Add more courses here
-];
-
-const homeworks = [
-  { id: 1, status: 'In progress', name: 'Addition and subtraction', subject: 'Math', teacher: 'Tomy' },
-  { id: 2, status: 'Completed', name: 'Addition and subtraction', subject: 'Science', teacher: 'Akanen' },
-  { id: 3, status: 'Canceled', name: 'Addition and subtraction', subject: 'History', teacher: 'Vigi' },
-  { id: 4, status: 'In progress', name: 'Addition and subtraction', subject: 'Art', teacher: 'Tomas' },
-  // Add more homework here
+  {
+    id: 3,
+    title: "Chemistry Class - 1",
+    teacher: "Jane Smith",
+    image: "/chemistry.png", // Thay bằng ảnh thật
+  },
+  {
+    id: 4,
+    title: "English Class - 1",
+    teacher: "David Lee",
+    image: "/english.png", // Thay bằng ảnh thật
+  },
 ];
 
 function HomePage() {
+  const [checkedCourses, setCheckedCourses] = useState({});
+
+  const handleAddCourse = (courseId) => {
+    console.log("Add course:", courseId);
+    setCheckedCourses((prev) => ({ ...prev, [courseId]: true }));
+  };
+
+  const handleRemoveCourse = (courseId) => {
+    console.log("Remove course:", courseId);
+    setCheckedCourses((prev) => ({ ...prev, [courseId]: false }));
+  };
+
+  const handleCheckCourse = (courseId) => {
+    console.log("Check course:", courseId);
+    setCheckedCourses((prev) => ({ ...prev, [courseId]: true }));
+  };
+
+  const handleUncheckCourse = (courseId) => {
+    console.log("Uncheck course:", courseId);
+    setCheckedCourses((prev) => ({ ...prev, [courseId]: false }));
+  };
+
   return (
-          <Grid container spacing={3}>
-            {/* Progress Overview */}
-            {progressData.map((progress) => (
-              <Grid item xs={12} sm={6} md={4} key={progress.title}>
-                <ProgressCard
-                  title={progress.title}
-                  percentage={progress.percentage}
-                  color={progress.color}
+    <Box p={3}>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Welcome, Student!
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+            <Typography variant="h6" component="h2">
+              My Courses
+            </Typography>
+            <Button color="primary" size="small">
+              See All
+            </Button>
+          </Box>
+          <Grid container spacing={2}>
+            {courses.map((course) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={course.id}>
+                <CourseCard
+                  course={course}
+                  onAdd={() => handleAddCourse(course.id)}
+                  onRemove={() => handleRemoveCourse(course.id)}
+                  onCheck={() => handleCheckCourse(course.id)}
+                  onUncheck={() => handleUncheckCourse(course.id)}
+                  isChecked={checkedCourses[course.id]}
                 />
               </Grid>
             ))}
-
-            {/* Timetable */}
-            <Grid item xs={12} md={6}>
-              <Timetable />
-            </Grid>
-
-            {/* My Courses */}
-            <Grid item xs={12} md={6}>
-              <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6" component="h2">
-                  My Courses
-                </Typography>
-                <Button color="primary" size="small">
-                  See All
-                </Button>
-              </Box>
-              <Grid container spacing={2}>
-                {courses.map((course) => (
-                  <Grid item xs={12} sm={6} key={course.id}>
-                    <CourseCard course={course} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Grid>
-
-            {/* My Homework */}
-            <Grid item xs={12}>
-              <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography variant="h6" component="h2">
-                  My Homework
-                </Typography>
-                <Button color="primary" size="small">
-                  See All
-                </Button>
-              </Box>
-              <HomeworkTable homeworks={homeworks} />
-            </Grid>
           </Grid>
+        </Grid>
+        {/* Thêm các phần khác của trang chủ (nếu cần) */}
+      </Grid>
+    </Box>
   );
 }
 

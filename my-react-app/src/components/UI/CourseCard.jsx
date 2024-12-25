@@ -5,68 +5,113 @@ import {
   CardMedia,
   Typography,
   IconButton,
-  Tooltip
+  Tooltip,
+  Badge,
+  styled,
 } from "@mui/material";
 import {
   AddCircleOutline,
   RemoveCircleOutline,
   CheckBoxOutlineBlank,
-  CheckBox
+  CheckBox,
 } from "@mui/icons-material";
-import { styled } from '@mui/material/styles';
 
-const CustomCard = styled(Card)({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  height: '100%',
-});
-const CustomCardMedia = styled(CardMedia)({
-  paddingTop: '56.25%', // 16:9
-});
-const CustomCardContent = styled(CardContent)({
-  flexGrow: 1,
-});
-const CardTitle = styled(Typography)({
-  fontWeight: 'bold',
-});
-const CardActions = styled('div')({
-  display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: 'auto',
-});
-const IconButtonWrapper = styled(IconButton)({
-  padding: '4px',
-});
+const NewBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: "#ed0b4c",
+    color: "white",
+    padding: "0 4px",
+    borderRadius: "8.93px 0px 8.93px 0px",
+    fontFamily: "Poppins",
+    fontSize: "14px",
+    fontStyle: "normal",
+    fontWeight: "600",
+    lineHeight: "24px", /* 171.429% */
+  },
+}));
 
-function CourseCard({ course, onAdd, onRemove, onCheck, onUncheck, isChecked}) {
+function CourseCard({ course }) {
+  const [isAdded, setIsAdded] = React.useState(false);
+  const [isChecked, setIsChecked] = React.useState(false);
+
+  const handleAdd = () => {
+    setIsAdded(!isAdded);
+  };
+
+  const handleCheck = () => {
+    setIsChecked(!isChecked);
+  };
   return (
-    <CustomCard elevation={2}>
-      <CustomCardMedia
-        image={course.image} // Thay đổi đường dẫn ảnh
-        title={course.title}
-      />
-      <CustomCardContent>
-        <CardTitle gutterBottom variant="h6" component="div">
-          {course.title}
-        </CardTitle>
-        <Typography variant="body2" color="text.secondary">
+    <div className="w-[245px] bg-white rounded-[10px] border border-[#dde1e6] flex-col justify-start items-center inline-flex overflow-hidden shadow-md">
+      <div className="self-stretch h-40 bg-[#dde1e6] justify-start items-start inline-flex overflow-hidden relative">
+        <CardMedia
+          component="img"
+          image={course.image}
+          alt={course.title}
+          className="w-full h-full object-cover"
+        />
+        <NewBadge
+          badgeContent={"New"}
+          color="primary"
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "left",
+          }}
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            "& .MuiBadge-badge": {
+              padding: "0 4px",
+              borderBottomRightRadius: "8.93px",
+              borderTopLeftRadius: "8.93px",
+            },
+          }}
+        />
+      </div>
+      <div className="self-stretch p-4 bg-white flex-col justify-start items-start gap-1.5 flex">
+        <Typography className="text-[#001d6c] text-base font-normal font-['Poppins']">
           {course.teacher}
         </Typography>
-      </CustomCardContent>
-      <CardActions>
-        <Tooltip title={isChecked ? "Remove from course" : "Add to course"} placement="top">
-          <IconButtonWrapper onClick={isChecked ? onRemove : onAdd}>
-            {isChecked ? <RemoveCircleOutline color="error" /> : <AddCircleOutline color="primary" />}
-          </IconButtonWrapper>
-        </Tooltip>
-        <Tooltip title={isChecked ? "Uncheck" : "Check"} placement="top">
-          <IconButtonWrapper onClick={isChecked ? onUncheck : onCheck}>
-            {isChecked ? <CheckBox color="primary" /> : <CheckBoxOutlineBlank />}
-          </IconButtonWrapper>
-        </Tooltip>
-      </CardActions>
-    </CustomCard>
+        <Typography className="text-[#001d6c] text-base font-semibold font-['Poppins']">
+          {course.title}
+        </Typography>
+        <div className="self-stretch justify-start items-center gap-4 inline-flex mt-auto">
+          <Tooltip
+            title={isAdded ? "Remove from course" : "Add to course"}
+            placement="top"
+          >
+            <IconButton
+              onClick={handleAdd}
+              size="small"
+              className="text-[#001d6c]"
+            >
+              {isAdded ? (
+                <RemoveCircleOutline />
+              ) : (
+                <AddCircleOutline />
+              )}
+            </IconButton>
+          </Tooltip>
+          <Tooltip
+            title={isChecked ? "Uncheck" : "Check"}
+            placement="top"
+          >
+            <IconButton
+              onClick={handleCheck}
+              size="small"
+              className="text-[#001d6c]"
+            >
+              {isChecked ? (
+                <CheckBox />
+              ) : (
+                <CheckBoxOutlineBlank />
+              )}
+            </IconButton>
+          </Tooltip>
+        </div>
+      </div>
+    </div>
   );
 }
 

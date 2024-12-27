@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily:
       {
-        font: [ "Poppins", "serif"],
+        font: ['Roboto','sans-serif'],
       },
       colors: {
         bgcolor: "#FFFFFF",

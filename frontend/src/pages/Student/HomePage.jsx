@@ -54,13 +54,18 @@ function HomePage() {
   };
 
   return (
-    <Box p={3}>
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Box>
+      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, ml: 4 }}>
         Welcome, Student!
       </Typography>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{pl: 4}}>
         <Grid item xs={12}>
-          <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+          <Box
+            mb={2}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
             <Typography variant="h6" component="h2">
               My Courses
             </Typography>

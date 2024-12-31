@@ -62,13 +62,13 @@ const adminMenuData = [
     icon: <GroupIcon />,
   },
   {
-    title: "Quản lí lịch học",
+    title: "Quản lí lớp học",
     link: "/admin/lesson-time-management",
     icon: <EventAvailableIcon />,
   },
   {
-    title: "Thanh toán cho giáo viên",
-    link: "/admin/tutors-payment",
+    title: "Quản lí thu chi",
+    link: "/admin/payment",
     icon: <AttachMoneyIcon />,
   },
   {

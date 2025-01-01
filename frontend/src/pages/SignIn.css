@@ -1,0 +1,12 @@
+/* src/pages/SignIn.css */
+.signin-container {
+    background-image: url('/login.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}

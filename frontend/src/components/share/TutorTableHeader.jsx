@@ -50,7 +50,7 @@ const StudentTableHeader = () => {
                     className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
                     style={{ fontFamily: "Roboto" }}
                 >
-                    Chỉnh Sửa
+                    Lương/tháng
                 </th>
             </tr>
         </thead>

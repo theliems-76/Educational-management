@@ -42,6 +42,7 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
         tuitionFee: '',
         schedule: [],
     });
+    const [startDate, setStartDate] = useState('');
     useEffect(() => {
         if (editCourse) {
             setFormData({
@@ -51,6 +52,7 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
                 tuitionFee: editCourse.tuitionFee || '',
                  schedule: Array.isArray(editCourse.schedule) ? editCourse.schedule.map(String) : [],
             });
+            setStartDate(editCourse.startDate || '');
         }
     }, [editCourse]);
       const handleFormChange = (event) => {
@@ -64,10 +66,13 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
             }
                  return {...prev, [name]: value};
           });
+          if (name === 'startDate') {
+            setStartDate(value); // Update startDate state
+        }
      };
      const handleFormSubmit = (event) => {
         event.preventDefault();
-         handleEditSubmit({ ...editCourse, ...formData });
+         handleEditSubmit({ ...editCourse, ...formData, startDate });
          setNotification("Đã chỉnh sửa lớp học thành công!");
          setNotificationType("edit");
         setTimeout(() => {
@@ -188,6 +193,20 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
                                 ))}
                             </Select>
                         </FormControl>
+                    </div>
+                    <div>
+                        <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
+                        Ngày Bắt Đầu
+                        </label>
+                        <input
+                        type="date"
+                        id="startDate"
+                        className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                        name="startDate"
+                        value={startDate}
+                        onChange={handleFormChange}
+                        required
+                        />
                     </div>
                     <div className="col-span-2 flex justify-end">
                         <button

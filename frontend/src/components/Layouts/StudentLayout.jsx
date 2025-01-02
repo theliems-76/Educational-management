@@ -5,15 +5,12 @@ import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Header from "../Header";
-import AdminSidebar from "../AdminSidebar";
-
+import Sidebar from "../../components/Sidebar"; 
 const drawerWidth = 240;
 
 const Main = styled("main")(({ theme }) => ({
   flexGrow: 1,
-  padding: theme.spacing(3), // Giữ padding này cho nội dung bên trong Main
-  width: `calc(100% - ${drawerWidth}px)`, // Thêm width
-  marginLeft: drawerWidth,
+  padding: theme.spacing(3),
 }));
 
 const AppBar = styled(MuiAppBar)(({ theme }) => ({
@@ -33,7 +30,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-function AdminLayout({ children }) {
+function StudentLayout({ children }) {
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -42,7 +39,7 @@ function AdminLayout({ children }) {
           <Header />
         </Toolbar>
       </AppBar>
-      <AdminSidebar />
+      <Sidebar />
       <Main className="#FFFFFF">
         <DrawerHeader />
         {children}
@@ -51,4 +48,4 @@ function AdminLayout({ children }) {
   );
 }
 
-export default AdminLayout;
+export default StudentLayout;

@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 
 const drawerWidth = 240;
 
@@ -39,31 +39,24 @@ const StyledDrawer = styled(MuiDrawer, {
 }));
 
 const verMenuData = [
-  {
-    title: "Trang chính",
-    link: "/student/home",
-    icon: <HomeIcon />,
-  },
-  {
-    title: "Hồ sơ của tôi",
-    link: "/student/profile",
-    icon: <PersonIcon />,
-  },
+
   {
     title: "Khóa học của tôi",
     link: "/student/my-courses",
     icon: <BookIcon />,
   },
   {
+    title: "Hồ sơ của tôi",
+    link: "/student/profile",
+    icon: <PersonIcon />,
+  },
+
+  {
     title: "Lịch học",
     link: "/student/timetable",
     icon: <CalendarTodayIcon />,
   },
-  {
-    title: "Bài tập về nhà",
-    link: "/student/homework",
-    icon: <AssignmentIcon />,
-  },
+
 ];
 
 function Sidebar() {
@@ -73,7 +66,7 @@ function Sidebar() {
         <ListItem
           sx={{
             marginBottom: "15px",
-            justifyContent: "initial"
+            justifyContent: "initial",
           }}
         >
           <IconButton
@@ -87,21 +80,21 @@ function Sidebar() {
           >
             <AutoFixHighIcon sx={{ fontSize: 35, color: "#9550fa" }} />
           </IconButton>
-            <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{
-                ml: 2,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
-            >
-              LMS
-            </Typography>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{
+              ml: 2,
+              fontFamily: "monospace",
+              fontWeight: 700,
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
+            }}
+          >
+            LMS
+          </Typography>
         </ListItem>
         <ListItem
           disablePadding
@@ -109,7 +102,7 @@ function Sidebar() {
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            marginBottom: "10px",
+            marginBottom: "50px",
           }}
         >
           <ListItemButton
@@ -146,7 +139,7 @@ function Sidebar() {
               to={item.link}
               sx={{
                 minHeight: 48,
-                justifyContent:  "initial",
+                justifyContent: "initial",
                 px: 2.5,
               }}
             >
@@ -159,9 +152,7 @@ function Sidebar() {
               >
                 {item.icon}
               </ListItemIcon>
-              <ListItemText
-                primary={item.title}
-              />
+              <ListItemText primary={item.title} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -186,9 +177,7 @@ function Sidebar() {
                 <SettingsIcon />
               </Badge>
             </ListItemIcon>
-            <ListItemText
-              primary={"Setting"}
-            />
+            <ListItemText primary={"Setting"} />
           </ListItemButton>
         </ListItem>
       </List>

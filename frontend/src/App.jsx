@@ -3,22 +3,20 @@
 // import Login from './pages/Login';
 // import NotFound from './pages/NotFound';
 
-  // Tạm thời hardcode user student để test giao diện
-  // const user = {
-  //   role: 'student'
-  // };
-  // localStorage.setItem('user', JSON.stringify(user))
-  
-    // <>
-    //   <BrowserRouter>
-    //     <Routes>
-    //       <Route path="/login" element={<Login />} />
-    //       <Route path="/not-found" element={<NotFound />} />
-    //       <Route path="/student/*" element={<StudentDashboard />} />
+// Tạm thời hardcode user student để test giao diện
+// const user = {
+//   role: 'student'
+// };
+// localStorage.setItem('user', JSON.stringify(user))
 
-    //       {/* Chuyển hướng trang root (/) đến /student/home */}
-    //       <Route path="/" element={<Navigate to="/student/home" replace />} />
+// <>
+//   <BrowserRouter>
+//     <Routes>
+//       <Route path="/login" element={<Login />} />
+//       <Route path="/not-found" element={<NotFound />} />
+//       <Route path="/student/*" element={<StudentDashboard />} />
 
+<<<<<<< HEAD
     //       {/* Không cần route "*" ở đây nữa */}
     //       {/* <Route path="*" element={<Navigate to="/student/home" replace />} /> */}
     //     </Routes>
@@ -36,8 +34,9 @@
     import theme from './theme';
     import Header from './components/Header';
     import MessageContainer from './components/Message/MessageContainer';
-    import SignIn from './pages/SignIn';
+    import SignIn from './pages/Signin';
     import Layout from './components/Layouts/Layout';
+    import StudentDashboard from "./pages/Student/StudentDashboard";
     function App() {
       const [isMessageListModalOpen, setIsMessageListModalOpen] = useState(false);
     
@@ -66,7 +65,7 @@
                         <Route path="/timetable" element={<TimeTable />} />
                         <Route path="/homework" element={<HomeworkList />} />
                         <Route path="/admin/*" element={<AdminDashboard />} />
-                        <Route path="/" element={<Navigate to="/student/home" replace />} />
+                        <Route path="/" element={<Navigate to="/student/profile" replace />} />
                       </Routes>
                     </Layout>
                   }
@@ -92,3 +91,12 @@
     }
     
     export default App;
+
+//       {/* Chuyển hướng trang root (/) đến /student/home */}
+//       <Route path="/" element={<Navigate to="/student/home" replace />} />
+
+//       {/* Không cần route "*" ở đây nữa */}
+//       {/* <Route path="*" element={<Navigate to="/student/home" replace />} /> */}
+//     </Routes>
+//   </BrowserRouter>
+// </>

@@ -55,10 +55,15 @@ function HomePage() {
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ mb: 4, ml: 4 }}>
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        sx={{ mb: 4, ml: 4 }}
+      >
         Welcome, Student!
       </Typography>
-      <Grid container spacing={3} sx={{pl: 4}}>
+      <Grid container spacing={3} sx={{ pl: 4 }}>
         <Grid item xs={12}>
           <Box
             mb={2}

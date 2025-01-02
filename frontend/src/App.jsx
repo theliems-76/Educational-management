@@ -16,7 +16,7 @@
 //       <Route path="/not-found" element={<NotFound />} />
 //       <Route path="/student/*" element={<StudentDashboard />} />
 
-<<<<<<< HEAD
+
     //       {/* Không cần route "*" ở đây nữa */}
     //       {/* <Route path="*" element={<Navigate to="/student/home" replace />} /> */}
     //     </Routes>
@@ -24,7 +24,6 @@
     // </>
     import React, { useState } from 'react';
     import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-    import StudentDashboard from './pages/Student/StudentDashboard';
     import NotFound from './pages/NotFound';
     import TimeTable from './components/TimeTable';
     import HomeworkList from './components/UI/HomeworkList';
@@ -36,7 +35,7 @@
     import MessageContainer from './components/Message/MessageContainer';
     import SignIn from './pages/Signin';
     import Layout from './components/Layouts/Layout';
-    import StudentDashboard from "./pages/Student/StudentDashboard";
+    import StudentDashboard from './pages/Student/StudentDashboard';
     function App() {
       const [isMessageListModalOpen, setIsMessageListModalOpen] = useState(false);
     

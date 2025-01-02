@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { IconButton, InputBase, Badge } from "@mui/material";
 import {
     Search as SearchIcon,
@@ -79,12 +79,22 @@ const Header = () => {
     ]);
 
        // Dữ liệu thông báo mẫu
-       const [notifications] = useState([
-        { senderName: "System", content: "Welcome to our app!", senderAvatar: "https://mui.com/static/images/avatar/7.jpg", id: 1, timestamp: new Date() },
-          { senderName: "User1", content: "New message from User 1!", senderAvatar: "https://mui.com/static/images/avatar/1.jpg", id: 2, timestamp: new Date() },
-          { senderName: "System", content: "Your account has been verified!", senderAvatar: "https://mui.com/static/images/avatar/7.jpg", id: 3,  timestamp: new Date() },
-        { senderName: "User2", content: "User2 is live!", senderAvatar: "https://mui.com/static/images/avatar/2.jpg", id: 4,  timestamp: new Date()},
-        { senderName: "System", content: "New app update!", senderAvatar: "https://mui.com/static/images/avatar/7.jpg", id: 5, timestamp: new Date()},
+    const [notifications] = useState([
+         {
+            senderName: "System", content: "Welcome to our app!", senderAvatar: "https://mui.com/static/images/avatar/7.jpg", id: 1, timestamp: new Date(), type: 'hoc_tap'
+        },
+         {
+            senderName: "User1", content: "New message from User 1!", senderAvatar: "https://mui.com/static/images/avatar/1.jpg", id: 2, timestamp: new Date(), type: 'hoc_phi'
+        },
+         {
+            senderName: "System", content: "Your account has been verified!", senderAvatar: "https://mui.com/static/images/avatar/7.jpg", id: 3,  timestamp: new Date(), type: 'hoc_tap'
+        },
+       {
+            senderName: "User2", content: "User2 is live!", senderAvatar: "https://mui.com/static/images/avatar/2.jpg", id: 4,  timestamp: new Date(), type: 'hoc_phi'
+        },
+      {
+            senderName: "System", content: "New app update!", senderAvatar: "https://mui.com/static/images/avatar/7.jpg", id: 5, timestamp: new Date(), type: 'hoc_tap'
+        },
     ]);
     const users = {
       "User1": {

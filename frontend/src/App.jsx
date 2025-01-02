@@ -36,6 +36,8 @@
     import SignIn from './pages/Signin';
     import Layout from './components/Layouts/Layout';
     import StudentDashboard from './pages/Student/StudentDashboard';
+    import TeacherDashboard from './pages/Teacher/TeacherDashboard'; 
+    import TeacherTimetable from './pages/Teacher/TeacherTimeTable';
     function App() {
       const [isMessageListModalOpen, setIsMessageListModalOpen] = useState(false);
     
@@ -64,6 +66,8 @@
                         <Route path="/timetable" element={<TimeTable />} />
                         <Route path="/homework" element={<HomeworkList />} />
                         <Route path="/admin/*" element={<AdminDashboard />} />
+                        <Route path="/teacher/my-classes" element={<TeacherDashboard />} />
+                        <Route path="/teacher/timetable" element={<TeacherTimetable/>}/>
                         <Route path="/" element={<Navigate to="/student/profile" replace />} />
                       </Routes>
                     </Layout>

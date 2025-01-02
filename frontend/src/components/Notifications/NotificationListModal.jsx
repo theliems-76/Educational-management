@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Popover, Box, List, ListItem, ListItemText, ListItemAvatar, Avatar, Typography, Tooltip } from '@mui/material';
+import { Popover, Box, List, ListItem, ListItemText, ListItemAvatar, Avatar, Typography, Tooltip, Tabs, Tab } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import moment from 'moment'; // Import thư viện moment
+import moment from 'moment';
 
 const StyledPopover = styled(Popover)(({ theme }) => ({
     "& .MuiPaper-root": {
@@ -9,26 +9,38 @@ const StyledPopover = styled(Popover)(({ theme }) => ({
     },
 }));
 
+
 const NotificationListModal = ({ isOpen, onClose, anchorEl, notifications, onSelectNotification }) => {
     const [tabValue, setTabValue] = useState(0);
+    const [learningNotifications, setLearningNotifications] = useState([]);
+    const [tuitionNotifications, setTuitionNotifications] = useState([]);
 
-    useEffect(() => {
+     useEffect(() => {
         setTabValue(0);
-    }, [isOpen]);
+         if (notifications) {
+            // Filter notifications based on a type
+             const learning = notifications.filter(notification => notification.type === 'hoc_tap');
+             const tuition = notifications.filter(notification => notification.type === 'hoc_phi');
+            setLearningNotifications(learning);
+            setTuitionNotifications(tuition);
+         }
+    }, [isOpen, notifications]);
 
-    if (!isOpen) {
+     if (!isOpen) {
         return null;
     }
 
     const handleNotificationClick = (notification) => {
-       onSelectNotification(notification);
+        onSelectNotification(notification);
         onClose();
     };
-     const handleTabChange = (event, newValue) => {
-       setTabValue(newValue);
+
+
+    const handleTabChange = (event, newValue) => {
+        setTabValue(newValue);
     };
     return (
-         <StyledPopover
+        <StyledPopover
             open={isOpen}
             onClose={onClose}
             anchorEl={anchorEl}
@@ -51,9 +63,18 @@ const NotificationListModal = ({ isOpen, onClose, anchorEl, notifications, onSel
                     overflowY: 'auto',
                 }}
             >
+                 <Tabs
+                    value={tabValue}
+                    onChange={handleTabChange}
+                    aria-label="notification-tabs"
+                    centered
+                >
+                    <Tab label="Học tập" />
+                    <Tab label="Học phí" />
+                </Tabs>
                 <Box p={2}>
-                    <List>
-                        {notifications.map((notification, index) => (
+                 <List>
+                        {(tabValue === 0 ? learningNotifications : tuitionNotifications).map((notification, index) => (
                             <ListItem key={index} button onClick={() => handleNotificationClick(notification)}>
                                 <ListItemAvatar>
                                   <Avatar src={notification.senderAvatar} alt={notification.senderName} />
@@ -80,7 +101,7 @@ const NotificationListModal = ({ isOpen, onClose, anchorEl, notifications, onSel
                                 />
                             </ListItem>
                         ))}
-                    </List>
+                   </List>
                 </Box>
             </Box>
         </StyledPopover>

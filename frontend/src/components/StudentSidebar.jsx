@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Home as HomeIcon,
+  Home as HomeIcon, // Đã thêm HomeIcon
   Person as PersonIcon,
   Book as BookIcon,
   CalendarToday as CalendarTodayIcon,
@@ -39,7 +39,11 @@ const StyledDrawer = styled(MuiDrawer, {
 }));
 
 const verMenuData = [
-
+  {
+    title: "Dashboard", // Thêm mục Dashboard
+    link: "/student/dashboard", // Đường dẫn đến trang Dashboard
+    icon: <HomeIcon />,   // Thêm icon HomeIcon
+  },
   {
     title: "Khóa học của tôi",
     link: "/student/my-courses",
@@ -50,16 +54,14 @@ const verMenuData = [
     link: "/student/profile",
     icon: <PersonIcon />,
   },
-
   {
     title: "Lịch học",
     link: "/student/timetable",
     icon: <CalendarTodayIcon />,
   },
-
 ];
 
-function Sidebar() {
+function StudentSidebar() {
   return (
     <StyledDrawer variant="permanent" open={true}>
       <List>
@@ -185,4 +187,4 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+export default StudentSidebar;

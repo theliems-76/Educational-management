@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
 const StudentTableRow = ({ student, selectedRows, handleRowSelect, handleOpenEditModal }) => {
     return (
@@ -63,10 +65,11 @@ const StudentTableRow = ({ student, selectedRows, handleRowSelect, handleOpenEdi
                 className="text-gray-700 text-base font-normal py-2 px-4"
                 style={{ fontFamily: "Roboto" }}
             >
-                <button
-                    className="text-blue-500 hover:underline"
+                 <button
+                    className="text-blue-500 hover:underline flex items-center"
                     onClick={() => handleOpenEditModal(student)}
                 >
+                    <FontAwesomeIcon icon={faPenToSquare} className="mr-1" />
                     Chỉnh sửa
                 </button>
             </td>

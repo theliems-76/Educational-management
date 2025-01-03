@@ -5,7 +5,7 @@ import MuiAppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Header from "../Header";
-import Sidebar from "../../components/Sidebar"; 
+import Sidebar from "../StudentSidebar"; 
 const drawerWidth = 240;
 
 const Main = styled("main")(({ theme }) => ({

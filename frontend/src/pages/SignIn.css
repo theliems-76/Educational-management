@@ -1,12 +1,21 @@
-/* src/pages/SignIn.css */
 .signin-container {
-    background-image: url('/login.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
+    background: linear-gradient(300deg, #00bfff, #ff4c68, #ef8172);
+    background-size: 300% 100%; 
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-
+    animation: gradient-animation 18s ease infinite;
 }
+
+@keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }

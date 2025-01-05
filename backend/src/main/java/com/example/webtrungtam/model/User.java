@@ -1,20 +1,19 @@
 package com.example.webtrungtam.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users", indexes = {})
+@Table(name = "Users")
 public class User {
 
     @Id
-    @Column(name = "id_user", columnDefinition = "CHAR(8)",length = 8)
+    @Column(name = "id_user", length = 8)
     private String  idUser;
 
     @JoinColumn(name = "role_name", nullable = false)
     private String roleName;
 
-    @Column(name = "username", nullable = false, length = 50)
+    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
 
     @Column(name = "password", nullable = false, length = 255)
@@ -27,30 +26,6 @@ public class User {
 
     @Column(name = "created_year", nullable = false)
     private int created_year;
-
-    @JsonBackReference(value = "teacher-user")  // Bỏ qua thông tin lớp con để tránh vòng lặp
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Teacher teacher;
-
-    @JsonBackReference(value = "student-user")  // Bỏ qua thông tin lớp con để tránh vòng lặp
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Student student;
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
 
     public String getIdUser() {
         return idUser;

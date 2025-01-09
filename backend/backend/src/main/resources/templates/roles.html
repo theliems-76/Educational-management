@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách vai trò</title>
+</head>
+<body>
+<h1>Danh sách vai trò</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Permissions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Lặp qua danh sách roles -->
+    <tr th:each="role : ${roles}">
+        <td th:text="${role.idRole}"></td> <!-- Đúng tên biến Java -->
+        <td th:text="${role.name}"></td>
+        <td th:text="${role.permissions}"></td>
+    </tr>
+
+    </tbody>
+</table>
+</body>
+</html>

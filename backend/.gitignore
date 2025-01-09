@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+
+.codegpt
+=======
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
@@ -32,7 +35,4 @@ build/
 
 ### VS Code ###
 .vscode/
-=======
-
-.codegpt
->>>>>>> 5c85a6a68cfdd7fcfb570508306257858e012151
+>>>>>>> 59ed336 (first commit)

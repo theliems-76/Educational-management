@@ -1,13 +1,9 @@
 package com.example.webtrungtam.controller;
 
-import com.example.webtrungtam.dto.CreateStudentRequest;
-import com.example.webtrungtam.dto.LoginRequest;
-import com.example.webtrungtam.model.Student;
 import com.example.webtrungtam.model.User;
 import com.example.webtrungtam.repository.UserRepository;
 import com.example.webtrungtam.service.AuthService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,37 +20,40 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, HttpSession session) {
+    // API đăng nhập
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> loginRequest,HttpSession session) {
 
         // Kiểm tra thông tin đầu vào
-        if (request.getId()==null || request.getPassword()==null) {
+        if (!loginRequest.containsKey("ID") || !loginRequest.containsKey("password")) {
             return ResponseEntity.badRequest().body(Map.of("message", "ID và password là bắt buộc."));
         }
 
-        String Id;
+        String ID;
         try {
-            Id = request.getId();
+            ID = loginRequest.get("ID");
         } catch (NumberFormatException e) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Id không hợp lệ."));
-        }
+            return ResponseEntity.badRequest().body(Map.of("message", "ID không hợp lệ."));
+        }        String password = loginRequest.get("password");
 
-        String password = request.getPassword();
         if (password == null || password.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body(Map.of("message", "Vui lòng điền đúng mật khẩu."));
+            return ResponseEntity.badRequest().body(Map.of("message", "Thông tin đăng nhập không hợp lệ."));
         }
 
         try {
 //            // Xác thực người dùng
 //            User user = authService.authenticate(username, password);
+//
+//            if (user != null) {
+//                String role = user.getRole().getName(); // Lấy tên vai trò từ bảng Role
 
             // Xác thực người dùng và lấy token
-            String token = authService.authenticate(request);
+            String token = authService.authenticate(ID, password);
 
             // Đăng nhập thành công
             if (token != null) {
                 // Truy vấn thông tin người dùng
-                User user = userRepository.findByIdUser(Id)
+                User user = userRepository.findByIdUser(ID)
                         .orElseThrow(() -> new RuntimeException("Không tìm thấy ID người dùng."));
 
                 String roleName = user.getRoleName();
@@ -70,16 +69,16 @@ public class AuthController {
                 // Xác định giao diện điều hướng
                 switch (roleName) {
                     case "Admin":
-                        redirectUrl = "/admin/home";
+                        redirectUrl = "/admin/dashboard";
                         break;
                     case "Teacher":
-                        redirectUrl = "/teacher/home";
+                        redirectUrl = "/teacher/dashboard";
                         break;
                     case "Student":
-                        redirectUrl = "/student/home";
+                        redirectUrl = "/student/dashboard";
                         break;
                     default:
-                        redirectUrl = "/signin";
+                        redirectUrl = "/login";
                 }
 
                 // Lưu ID người dùng vào session

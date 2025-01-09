@@ -1,8 +1,6 @@
 // AuthService.java - Service xử lý logic đăng nhập
 package com.example.webtrungtam.service;
 
-import com.example.webtrungtam.dto.CreateStudentRequest;
-import com.example.webtrungtam.dto.LoginRequest;
 import com.example.webtrungtam.model.User;
 import com.example.webtrungtam.repository.UserRepository;
 import com.example.webtrungtam.util.JwtUtil;
@@ -24,18 +22,21 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil; // Đảm bảo đã tạo lớp JwtUtil cho việc xử lý JWT.
 
-    public String authenticate(LoginRequest request) {
+    // Xác thực người dùng (tạo JWT token)
+    public String authenticate(String ID, String password) {
         // Tìm người dùng trong database
-        User user = userRepository.findByIdUser(request.getId())
+        User user = userRepository.findByIdUser(ID)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
 
         // Kiểm tra mật khẩu có khớp không
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(password, user.getPassword())) {
             System.out.println("Mật khẩu hợp lệ!");
 
-            String roleName = user.getRoleName();;
-            String token = jwtUtil.generateToken(user, roleName);
 
+
+            String roleName = user.getRoleName();;
+
+            String token = jwtUtil.generateToken(user, roleName);
             return token;
         }
         else {
@@ -44,3 +45,28 @@ public class AuthService {
         }
     }
 }
+
+//    private final AuthenticationManager authenticationManager;
+//    private final UserDetailsService userDetailsService;
+//    private final JwtUtil jwtUtil; // Inject JwtUtil
+//    private final Argon2PasswordEncoder passwordEncoder;
+//
+//    @Autowired
+//    public AuthService(AuthenticationManager authenticationManager,
+//                       UserDetailsService userDetailsService,
+//                       JwtUtil jwtUtil,
+//                       Argon2PasswordEncoder passwordEncoder) {
+//        this.authenticationManager = authenticationManager;
+//        this.userDetailsService = userDetailsService;
+//        this.jwtUtil = jwtUtil;
+//        this.passwordEncoder = passwordEncoder;
+//    }
+//
+//    // Đăng nhập
+//    public String login(String username, String password) {
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(username, password)
+//        );
+//        User user = (User) authentication.getPrincipal();
+//        return jwtUtil.generateToken(user, user.getRole()); // Tạo token
+//    }

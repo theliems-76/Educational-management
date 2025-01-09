@@ -49,3 +49,12 @@ export const searchStudents = async (username) => {
     throw error;
   }
 };
+export const deleteStudent = async (id) => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/delete/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Lỗi khi xóa học viên với ID ${id}:`, error);
+    throw error;
+  }
+};

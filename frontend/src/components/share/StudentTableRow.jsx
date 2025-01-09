@@ -2,18 +2,31 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
-const StudentTableRow = ({ student, selectedRows, handleRowSelect, handleOpenEditModal }) => {
+const StudentTableRow = ({
+  student,
+  selectedRows,
+  handleRowSelect,
+  handleOpenEditModal,
+}) => {
   return (
     <tr
-      key={student.idStudent} // Sửa key thành idStudent
+      key={student.idStudent}
       className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
-      onClick={() => handleRowSelect(student.idStudent)} // Sửa handleRowSelect
+      onClick={() => handleRowSelect(student.idStudent)}
       style={{
-        backgroundColor: selectedRows.includes(student.idStudent) // Sửa selectedRows
+        backgroundColor: selectedRows.includes(student.idStudent)
           ? '#f0f0f0'
           : 'white',
       }}
     >
+       <td className="py-2 px-4">
+                <input
+                  type="checkbox"
+                  checked={selectedRows.includes(student.idStudent)}
+                  onChange={() => handleRowSelect(student.idStudent)}
+                  onClick={(e) => e.stopPropagation()} 
+                />
+        </td>
       <td
         className="text-gray-700 text-base font-normal py-2 px-4"
         style={{ fontFamily: 'Roboto' }}

@@ -10,6 +10,8 @@ import {
   getStudents,
   getStudentById,
   searchStudents,
+  deleteStudent,
+
 } from '../../apis/studentApi';
 import axios from 'axios';
 const StudentList = ({ setStudents }) => {
@@ -110,7 +112,49 @@ const StudentList = ({ setStudents }) => {
       setSelectedRows([...selectedRows, id]);
     }
   };
+  const handleDelete = async () => {
+    if (selectedRows.length === 0) {
+      setNotificationError('Vui lòng chọn ít nhất một học viên để xóa.');
+      setNotificationType('error');
+      return;
+    }
 
+    if (
+      window.confirm(
+        `Bạn có chắc chắn muốn xóa ${selectedRows.length} học viên không?`
+      )
+    ) {
+      try {
+        // Xóa từng học viên
+        for (const id of selectedRows) {
+          await deleteStudent(id);
+        }
+
+        // Cập nhật lại danh sách học viên sau khi xóa
+        setStudents((prevStudents) =>
+          prevStudents.filter(
+            (student) => !selectedRows.includes(student.idStudent)
+          )
+        );
+
+        setNotification('Xóa học viên thành công!');
+        setNotificationType('success');
+        setSelectedRows([]); // Xóa các hàng đã chọn
+      } catch (error) {
+        console.error('Lỗi khi xóa học viên:', error);
+        setNotificationError(
+          error.response?.data?.message || 'Xóa học viên thất bại.'
+        );
+        setNotificationType('error');
+      } finally {
+        setTimeout(() => {
+            setNotification(null);
+            setNotificationType(null);
+            setNotificationError(null);
+          }, 3000);
+      }
+    }
+  };
   const handleSelectAll = (selectAll) => {
     if (selectAll) {
       const allIds = students.map((student) => student.idStudent);
@@ -282,15 +326,21 @@ const StudentList = ({ setStudents }) => {
   return (
     <div className="w-full font-sans p-4 relative">
       <div className="mb-4 flex items-center justify-between">
-        <TutorSearch searchQuery={searchQuery} handleSearch={handleSearch} />
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleOpenModal}
-        >
-          + Thêm học viên
-        </button>
-      </div>
-      {/* Hiển thị thông báo */}
+    <TutorSearch searchQuery={searchQuery} handleSearch={handleSearch} />
+    <div className="flex justify-end space-x-4">
+  <button
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    onClick={handleOpenModal}
+  >
+    + Thêm học viên
+  </button>
+  <button
+    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+  >
+    Xóa học viên
+  </button>
+</div>
+</div>
       {notification && (
         <div
           className={`notification ${

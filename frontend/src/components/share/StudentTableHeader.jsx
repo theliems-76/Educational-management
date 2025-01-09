@@ -1,21 +1,30 @@
 import React from 'react';
 
-const StudentTableHeader = () => {
-    return (
-        <thead>
-            <tr className="bg-[#f2f4f8]">
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    ID
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/6"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Họ Tên
-                </th>
+const StudentTableHeader = ({ selectedRows, handleRowSelect, students }) => {
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const allStudentIds = students.map((student) => student.idStudent);
+      handleRowSelect(allStudentIds);
+    } else {
+      handleRowSelect([]);
+    }
+  };
+
+  return (
+    <thead>
+      <tr className="bg-gray-200">
+        <th className="py-2 px-4 text-left">
+          <input
+            type="checkbox"
+            checked={
+              students.length > 0 && selectedRows.length === students.length
+            }
+            onChange={handleSelectAllClick}
+          />
+        </th>
+        <th className="py-2 px-4 text-left">ID</th>
+        <th className="py-2 px-4 text-left">Họ Tên</th>
+
                 <th
                     className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
                     style={{ fontFamily: "Roboto" }}

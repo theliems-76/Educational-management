@@ -3,9 +3,8 @@ import React from 'react';
 const AddStudentModal = ({ isModalOpen, handleCloseModal, handleSubmit, handleChange, newStudent, notification, notificationType, notificationError }) => {
     return (
         <div
-            className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50
-             ${isModalOpen ? "block" : "hidden"}`
-            } >
+            className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50 ${isModalOpen ? "block" : "hidden"}`}
+        >
             <div className="bg-white p-8 rounded shadow-lg w-3/5 relative">
                 <h2 className="text-2xl font-bold mb-4">Thêm Học Viên</h2>
                 {notificationError && notificationType === "add" && (
@@ -26,8 +25,8 @@ const AddStudentModal = ({ isModalOpen, handleCloseModal, handleSubmit, handleCh
                         </div>
                     </div>
                 )}
-                 <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-                    <div>
+                <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
+                    {/* <div>
                         <label htmlFor="id" className="block text-sm font-medium text-gray-700">Mã học viên</label>
                         <input
                             type="text"
@@ -37,16 +36,28 @@ const AddStudentModal = ({ isModalOpen, handleCloseModal, handleSubmit, handleCh
                             value={newStudent.id}
                             onChange={handleChange}
                             required
-                         />
-                    </div>
+                        />
+                    </div> */}
                      <div>
-                         <label htmlFor="name" className="block text-sm font-medium text-gray-700">Họ và Tên</label>
+                         <label htmlFor="username" className="block text-sm font-medium text-gray-700">Tên đăng nhập</label>
                          <input
                             type="text"
-                            id="name"
+                            id="username"
                             className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                            name="name"
-                            value={newStudent.name}
+                            name="username"
+                            value={newStudent.username}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div>
+                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+                         <input
+                            type="email"
+                            id="email"
+                            className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
+                            name="email"
+                            value={newStudent.email}
                             onChange={handleChange}
                             required
                         />
@@ -67,37 +78,37 @@ const AddStudentModal = ({ isModalOpen, handleCloseModal, handleSubmit, handleCh
                          </select>
                     </div>
                      <div>
-                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Số điện thoại</label>
+                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Số điện thoại</label>
                         <input
                             type="text"
-                            id="phoneNumber"
+                            id="phone"
                             className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                            name="phoneNumber"
-                           value={newStudent.phoneNumber}
+                            name="phone"
+                           value={newStudent.phone}
                             onChange={handleChange}
                             required
                         />
                      </div>
                    <div>
-                        <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700">Ngày sinh</label>
+                        <label htmlFor="dob" className="block text-sm font-medium text-gray-700">Ngày sinh</label>
                          <input
                             type="date"
-                            id="dateOfBirth"
+                            id="dob"
                              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                            name="dateOfBirth"
-                            value={newStudent.dateOfBirth}
+                            name="dob"
+                            value={newStudent.dob}
                              onChange={handleChange}
                              required
                         />
                     </div>
                     <div>
-                       <label htmlFor="grade" className="block text-sm font-medium text-gray-700">Lớp</label>
+                       <label htmlFor="classOfSchool" className="block text-sm font-medium text-gray-700">Lớp</label>
                         <input
                            type="text"
-                            id="grade"
+                            id="classOfSchool"
                             className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                           name="grade"
-                             value={newStudent.grade}
+                           name="classOfSchool"
+                             value={newStudent.classOfSchool}
                             onChange={handleChange}
                            required
                          />
@@ -115,13 +126,13 @@ const AddStudentModal = ({ isModalOpen, handleCloseModal, handleSubmit, handleCh
                         />
                    </div>
                     <div>
-                       <label htmlFor="extraClasses" className="block text-sm font-medium text-gray-700">Lớp học thêm</label>
+                       <label htmlFor="classStudents" className="block text-sm font-medium text-gray-700">Lớp học thêm</label>
                         <input
                              type="text"
-                             id="extraClasses"
+                             id="classStudents"
                              className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                           name="extraClasses"
-                            value={newStudent.extraClasses.join(", ")}
+                           name="classStudents"
+                            value={newStudent.classStudents.join(", ")}
                             onChange={handleChange}
                             required
                         />

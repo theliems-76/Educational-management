@@ -42,7 +42,9 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
         tuitionFee: '',
         schedule: [],
     });
+
     const [startDate, setStartDate] = useState('');
+
     useEffect(() => {
         if (editCourse) {
             setFormData({
@@ -52,7 +54,9 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
                 tuitionFee: editCourse.tuitionFee || '',
                  schedule: Array.isArray(editCourse.schedule) ? editCourse.schedule.map(String) : [],
             });
+
             setStartDate(editCourse.startDate || '');
+
         }
     }, [editCourse]);
       const handleFormChange = (event) => {
@@ -66,6 +70,7 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
             }
                  return {...prev, [name]: value};
           });
+
           if (name === 'startDate') {
             setStartDate(value); // Update startDate state
         }
@@ -73,10 +78,12 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
      const handleFormSubmit = (event) => {
         event.preventDefault();
          handleEditSubmit({ ...editCourse, ...formData, startDate });
+     };
+
          setNotification("Đã chỉnh sửa lớp học thành công!");
          setNotificationType("edit");
         setTimeout(() => {
-           setNotification('');
+        cation('');
             setNotificationType('');
             setNotificationError('');
             handleCloseModal();
@@ -208,6 +215,7 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
                         required
                         />
                     </div>
+
                     <div className="col-span-2 flex justify-end">
                         <button
                             type="button"
@@ -227,6 +235,5 @@ const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, hand
             </div>
         </div>
     );
-};
 
 export default EditCourseModal;

@@ -6,11 +6,11 @@ const StudentTable = ({ students, selectedRows, handleRowSelect, handleOpenEditM
   return (
     <div className="overflow-auto max-h-[400px] min-w-full">
       <table className="w-full">
-        <StudentTableHeader />
+        <StudentTableHeader selectedRows={selectedRows} handleRowSelect={handleRowSelect} students={students} />
         <tbody>
           {students.map((student) => (
             <StudentTableRow
-              key={student.id}
+              key={student.idStudent}
               student={student}
               selectedRows={selectedRows}
               handleRowSelect={handleRowSelect}

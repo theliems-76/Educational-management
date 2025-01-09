@@ -46,7 +46,7 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-  baseURL: 'http://localhost:5000/api', // Thay đổi baseURL nếu cần
+  baseURL: 'http://localhost:8080/api/auth', // Thay đổi baseURL nếu cần
   headers: {
     'Content-Type': 'application/json',
   },

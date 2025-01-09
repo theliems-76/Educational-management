@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Assignment as AssignmentIcon,
   AttachMoney as AttachMoneyIcon,
@@ -10,7 +10,8 @@ import {
   Settings as SettingsIcon,
   EventAvailable as EventAvailableIcon,
   RateReview as RateReviewIcon,
-} from "@mui/icons-material";
+  Logout as LogoutIcon,
+} from '@mui/icons-material';
 import {
   Avatar,
   Badge,
@@ -21,16 +22,18 @@ import {
   ListItemText,
   Typography,
   IconButton,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
-import MuiDrawer from "@mui/material/Drawer";
+  Menu,
+  MenuItem,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
 
 const drawerWidth = 240;
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-start",
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
@@ -39,56 +42,76 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const StyledDrawer = styled(MuiDrawer)(() => ({
   width: drawerWidth,
   flexShrink: 0,
-  "& .MuiDrawer-paper": {
+  '& .MuiDrawer-paper': {
     width: drawerWidth,
-    boxSizing: "border-box",
+    boxSizing: 'border-box',
   },
 }));
 
 const adminMenuData = [
   {
-    title: "Trang chính",
-    link: "/admin/home",
+    title: 'Trang chính',
+    link: '/admin/home',
     icon: <DashboardIcon />,
   },
   {
-    title: "Quản lí học viên",
-    link: "/admin/student-management",
+    title: 'Quản lí học viên',
+    link: '/admin/student-management',
     icon: <GroupIcon />,
   },
   {
-    title: "Quản lí giáo viên",
-    link: "/admin/tutor-management",
+    title: 'Quản lí giáo viên',
+    link: '/admin/tutor-management',
     icon: <GroupIcon />,
   },
   {
-    title: "Quản lí lớp học",
-    link: "/admin/lesson-time-management",
+    title: 'Quản lí lớp học',
+    link: '/admin/lesson-time-management',
     icon: <EventAvailableIcon />,
   },
   {
-    title: "Quản lí thu chi",
-    link: "/admin/payment",
+    title: 'Quản lí thu chi',
+    link: '/admin/payment',
     icon: <AttachMoneyIcon />,
   },
   {
-    title: "Hóa đơn",
-    link: "/admin/invoice",
+    title: 'Hóa đơn',
+    link: '/admin/invoice',
     icon: <BookIcon />,
-  },
-  {
-    title: "Học phí",
-    link: "/admin/default-lesson-fee",
-    icon: <AssignmentIcon />,
-  },
-  {
-    title: "Ý kiến phản hồi",
-    link: "/admin/review-request",
-    icon: <RateReviewIcon />,
   },
 ];
 
 function AdminSidebar() {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('id');
+    localStorage.removeItem('role');
+    navigate('/signin');
+  };
+
+  const handleAvatarClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    // Xử lý file ảnh, ví dụ: upload lên server
+    console.log('Selected file:', file);
+    // Cập nhật ảnh đại diện (cần lưu vào state hoặc database)
+  };
+
   return (
     <StyledDrawer variant="permanent" open={true}>
       <DrawerHeader
@@ -102,12 +125,12 @@ function AdminSidebar() {
           color="inherit"
           sx={{
             p: 0,
-            "&:hover": {
-              backgroundColor: "transparent",
+            '&:hover': {
+              backgroundColor: 'transparent',
             },
           }}
         >
-          <AutoFixHighIcon sx={{ fontSize: 35, color: "#001d6c" }} />
+          <AutoFixHighIcon sx={{ fontSize: 35, color: '#001d6c' }} />
         </IconButton>
         <Typography
           variant="h6"
@@ -115,11 +138,11 @@ function AdminSidebar() {
           component="div"
           sx={{
             ml: 2,
-            fontFamily: "monospace",
+            fontFamily: 'monospace',
             fontWeight: 700,
-            letterSpacing: ".3rem",
-            color: "#001d6c",
-            textDecoration: "none",
+            letterSpacing: '.3rem',
+            color: '#001d6c',
+            textDecoration: 'none',
           }}
         >
           LMS
@@ -133,21 +156,30 @@ function AdminSidebar() {
         <ListItem
           disablePadding
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            marginBottom: "10px",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            marginBottom: '10px',
           }}
         >
+          <input
+            type="file"
+            hidden
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="image/*"
+          />
           <ListItemButton
+            onClick={handleAvatarClick}
             sx={{
               minHeight: 48,
-              justifyContent: "initial",
+              justifyContent: 'initial',
               px: 0,
+              
             }}
           >
             <Avatar
-              sx={{ width: "70px", height: "70px" }}
+              sx={{ width: '70px', height: '70px', cursor: 'pointer' }}
               alt="John Doe"
               src="https://via.placeholder.com/82x82"
             />
@@ -156,18 +188,18 @@ function AdminSidebar() {
               secondary="Admin"
               sx={{
                 ml: 2,
-                ".MuiListItemText-primary": {
-                  fontWeight: "bold",
+                '.MuiListItemText-primary': {
+                  fontWeight: 'bold',
                 },
-                ".MuiListItemText-secondary": {
-                  fontSize: "0.8rem",
+                '.MuiListItemText-secondary': {
+                  fontSize: '0.8rem',
                 },
               }}
             />
           </ListItemButton>
         </ListItem>
         {adminMenuData.map((item, index) => (
-          <ListItem key={index} disablePadding sx={{ display: "block" }}>
+          <ListItem key={index} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               component={Link}
               to={item.link}
@@ -180,7 +212,7 @@ function AdminSidebar() {
                 sx={{
                   minWidth: 0,
                   mr: 3,
-                  justifyContent: "left",
+                  justifyContent: 'left',
                 }}
               >
                 {item.icon}
@@ -190,29 +222,42 @@ function AdminSidebar() {
           </ListItem>
         ))}
       </List>
-      <List sx={{ marginTop: "none", px: 0 }}>
-        <ListItem key={"Setting"} disablePadding sx={{ display: "block" }}>
-          <ListItemButton
-            sx={{
-              minHeight: 48,
-              px: 2.5,
-            }}
-          >
+      <List sx={{ marginTop: 'auto', px: 0 }}>
+        
+          
+        <ListItem key={'Logout'} disablePadding sx={{ display: 'block' }}>
+          <ListItemButton onClick={handleLogout} sx={{ minHeight: 48, px: 2.5 }}>
             <ListItemIcon
               sx={{
                 minWidth: 0,
                 mr: 3,
-                justifyContent: "center",
+                justifyContent: 'center',
               }}
             >
-              <Badge badgeContent={9} color="error">
-                <SettingsIcon />
-              </Badge>
+              <LogoutIcon />
             </ListItemIcon>
-            <ListItemText primary={"Setting"} />
+            <ListItemText primary={'Logout'} />
           </ListItemButton>
         </ListItem>
       </List>
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>Setting</MenuItem>
+        <MenuItem onClick={handleClose}>Account</MenuItem>
+      </Menu>
     </StyledDrawer>
   );
 }

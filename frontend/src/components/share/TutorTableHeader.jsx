@@ -44,13 +44,19 @@ const StudentTableHeader = () => {
                     className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
                     style={{ fontFamily: "Roboto" }}
                 >
-                    Lớp đang học
+                    Lớp đang dạy
                 </th>
                 <th
                     className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
                     style={{ fontFamily: "Roboto" }}
                 >
                     Lương/tháng
+                </th>
+                <th
+                    className="text-gray-700 text-base font-normal text-center py-2 px-4 w-1/12"
+                    style={{ fontFamily: "Roboto" }}
+                >
+                    Chỉnh sửa
                 </th>
             </tr>
         </thead>

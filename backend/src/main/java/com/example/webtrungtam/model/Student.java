@@ -1,28 +1,31 @@
 package com.example.webtrungtam.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Student")
+@Table(name = "student", indexes = {})
 public class Student {
-//    @EmbeddedId
-//    private StudentId id;
 
     @Id
-    @Column(name = "id_student", length = 8)
+    @Column(name = "id_student", columnDefinition = "CHAR(8)",length = 8)
     private String idStudent;
 
     @OneToOne
-    @JoinColumn(name = "id_user", nullable = false, unique = true)
+    @JsonManagedReference(value = "student-user") // Trả thông tin lớp cha
+    @JoinColumn(name = "user_id", columnDefinition = "CHAR(8)",nullable = false, unique = true,foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
 
     @Column(name = "dob", nullable = false)
@@ -36,6 +39,18 @@ public class Student {
 
     @Column(name = "school", nullable = false)
     private String school;
+
+    @OneToMany(mappedBy = "idStudent", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference // Ngăn lặp vòng khi trả về danh sách
+    private List<ClassStudent> classStudents = new ArrayList<>();
+
+    public List<ClassStudent> getClassStudents() {
+        return classStudents;
+    }
+
+    public void setClassStudents(List<ClassStudent> classStudents) {
+        this.classStudents = classStudents;
+    }
 
     public String getId() {
         return idStudent;

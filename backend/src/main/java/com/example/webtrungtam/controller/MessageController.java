@@ -102,7 +102,7 @@ public class MessageController {
     // Tìm kiếm người nhắn
     @GetMapping("/search")
     public ResponseEntity<List<User>> searchUsers(@RequestParam String keyword) {
-        List<User> users = userService.getUserByKey(keyword);
+        List<User> users = userService.searchUsersByUsername(keyword);
         return ResponseEntity.ok(users);
     }
 

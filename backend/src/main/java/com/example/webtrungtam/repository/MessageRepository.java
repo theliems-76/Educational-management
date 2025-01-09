@@ -12,14 +12,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MessageRepository extends JpaRepository<Message, Long> {
+public interface MessageRepository extends JpaRepository<Message, Integer> {
+
+    // Xóa tin nhắn theo người gửi
+    void deleteBySender(User sender);
+
+    // Xóa tin nhắn theo người nhận
+    void deleteByReceiver(User receiver);
 
     // Tìm tin nhắn giữa hai người dùng
     List<Message> findBySenderAndReceiverOrderByTimestampAsc(User sender, User receiver);
     List<Message> findByReceiverAndSenderOrderByTimestampAsc(User receiver, User sender);
 
     // Tìm tin nhắn chưa đọc
-    List<Message> findByReceiverAndIsReadOrderByTimestampAsc(User receiver, int isRead);
+    List<Message> findByReceiverAndIsReadOrderByTimestampAsc(User receiver, boolean isRead);
     // Tìm kiếm nội dung tin nhắn
     List<Message> findByContentContainingOrderByTimestampAsc(String keyword);
 

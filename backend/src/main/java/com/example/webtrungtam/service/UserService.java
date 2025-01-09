@@ -1,8 +1,12 @@
 package com.example.webtrungtam.service;
 
 import com.example.webtrungtam.model.Message;
+import com.example.webtrungtam.model.Student;
+import com.example.webtrungtam.model.Teacher;
 import com.example.webtrungtam.model.User;
 import com.example.webtrungtam.repository.MessageRepository;
+import com.example.webtrungtam.repository.StudentRepository;
+import com.example.webtrungtam.repository.TeacherRepository;
 import com.example.webtrungtam.repository.UserRepository;
 import com.example.webtrungtam.util.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,90 +31,132 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private TeacherRepository teacherRepository;
+
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
     private MessageRepository messageRepository;
 
     @Autowired
     private Argon2PasswordEncoder encoder;
 
-    //public User createUser(String username, String rawPassword, String email, String phone, String role,String classOfSchool) {
-//
-//        // Lấy năm hiện tại
-//        int currentYear = Year.now().getValue();
-//        String yearPrefix = String.valueOf(currentYear).substring(2); // Hai chữ số cuối của năm, ví dụ: "24"
-//
-//        // Lấy khối lớp, đảm bảo có hai chữ số
-//        String classPrefix = String.format("%02d", Integer.parseInt(classOfSchool)); // Ví dụ: "10"
-//
-//        // Tạo tiền tố cho ID: YYKK
-//        String yearClassPrefix = yearPrefix + classPrefix; // Ví dụ: "2410"
-//
-//        // Tìm số thứ tự cao nhất hiện tại
-//        Optional<User> lastUserOpt = userRepository.findTopByOrderByIdUserDesc();
-//        int currentMax = 0;
-//        if (lastUserOpt.isPresent()) {
-//            String lastId = lastUserOpt.get().getIdUser();
-//            if (lastId.startsWith(yearClassPrefix)) {
-//                try {
-//                    int sequence = Integer.parseInt(lastId.substring(4)); // Lấy phần số thứ tự
-//                    currentMax = sequence;
-//                } catch (NumberFormatException e) {
-//                    currentMax = 0;
-//                }
-//            }
-//        }
-//
-//
-//        // Sinh số thứ tự mới
-//        int newSequence = currentMax + 1;
-//
-//        // Sinh ID mới
-//        String newIdUser = IdGenerator.generateId(yearPrefix, "00", newSequence); // "00" là placeholder cho khối nếu không áp dụng
-//
-//        // Mã hóa mật khẩu
-//        encoder = new Argon2PasswordEncoder(16, 32, 1, 65536, 10);
-//        String encodedPassword = encoder.encode(rawPassword);
-//
-//        // Tạo User mới
-//        User newUser = new User();
-//        newUser.setIdUser(newIdUser);
-//        newUser.setUsername(username);
-//        newUser.setPassword(encodedPassword);
-//        newUser.setEmail(email);
-//        newUser.setPhone(phone);
-//        newUser.setCreated_year(currentYear);
-//        newUser.setRoleName(role);
-//
-//        return userRepository.save(newUser);
-    //}
 
-    // Lấy thông tin người dùng theo username
+    // Lấy thông tin người dùng theo id
     public User getUserById(String userId) {
         return userRepository.findByIdUser( userId).orElseThrow(() -> new RuntimeException("User not found"));
     }
+
     // Lấy thông tin người dùng theo username
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
     }
-    // Lấy thông tin người dùng theo từ khóa
-    public List<User> getUserByKey(String keyword) {
-        return userRepository.findByUsernameContaining(keyword);
+
+    // Tìm kiếm danh sách User theo từ khóa
+    public List<User> searchUsersByUsername(String username) {
+        return userRepository.findByUsernameContaining(username);
     }
 
-    public User findByIdUser(String id) {
-        return userRepository.findByIdUser(id)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + id));
+     //Lọc danh sách User trả về Teacher
+    public List<User> searchTeachersByUsername(String username) {
+        return userRepository.findByUsernameContaining(username)
+                .stream()
+                .filter(user -> user.getTeacher() != null) // Lọc các User có liên kết Teacher
+                .toList();
     }
 
-    // Cập nhật thông tin người dùng
-    public User updateUser(String id, User userDetails) {
+    // Tìm kiếm Student
+    public List<User> searchStudentsByUsername(String username) {
+        return userRepository.findByUsernameContaining(username)
+                .stream()
+                .filter(user -> user.getStudent() != null) // Lọc các User có liên kết Teacher
+                .toList();
+    }
+
+
+//    // Cập nhật thông tin người dùng
+//    public User updateUser(String id, User userDetails) {
+//        User user = userRepository.findByIdUser(id)
+//                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng!"));
+//        user.setUsername(userDetails.getUsername());
+//        user.setEmail(userDetails.getEmail());
+//        user.setPhone(userDetails.getPhone());
+//        updatePassword(user,userDetails.getPassword());
+//        return userRepository.save(user);
+//    }
+
+    public User updateUser(String id, User userDetails, boolean resetPassword) {
+        // Tìm User
         User user = userRepository.findByIdUser(id)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng!"));
+
+        // Cập nhật thông tin chung
         user.setUsername(userDetails.getUsername());
         user.setEmail(userDetails.getEmail());
         user.setPhone(userDetails.getPhone());
-        // user.setRole(userDetails.getRole());
-        //updatePassword(user,userDetails.getPassword());
+
+        // Cập nhật mật khẩu
+        if (resetPassword) {
+            // Đặt lại mật khẩu là ID
+            updatePassword(user, id);
+        } else if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
+            // Cập nhật mật khẩu mới nếu có
+            updatePassword(user, userDetails.getPassword());
+        }
+
+        // Xác định vai trò của người dùng
+        if (user.getStudent() != null) {
+            updateStudent(user.getStudent(), userDetails.getStudent());
+        } else if (user.getTeacher() != null) {
+            updateTeacher(user.getTeacher(), userDetails.getTeacher());
+        }
+
+        // Lưu User sau khi cập nhật
         return userRepository.save(user);
+    }
+
+    // Cập nhật mật khẩu
+    private void updatePassword(User user, String rawPassword) {
+        String encodedPassword = encoder.encode(rawPassword);
+        user.setPassword(encodedPassword);
+    }
+
+    // Cập nhật thông tin Student
+    private void updateStudent(Student student, Student studentDetails) {
+        if (studentDetails.getDob() != null) {
+            student.setDob(studentDetails.getDob());
+        }
+        if (studentDetails.getGender() != null) {
+            student.setGender(studentDetails.getGender());
+        }
+        if (studentDetails.getClassOfSchool() != null) {
+            student.setClassOfSchool(studentDetails.getClassOfSchool());
+        }
+        if (studentDetails.getSchool() != null) {
+            student.setSchool(studentDetails.getSchool());
+        }
+
+        // Lưu thông tin Student
+        studentRepository.saveAndFlush(student);
+    }
+
+    // Cập nhật thông tin Teacher
+    private void updateTeacher(Teacher teacher, Teacher teacherDetails) {
+        if (teacherDetails.getDob() != null) {
+            teacher.setDob(teacherDetails.getDob());
+        }
+        if (teacherDetails.getGender() != null) {
+            teacher.setGender(teacherDetails.getGender());
+        }
+        if (teacherDetails.getSchool() != null) {
+            teacher.setSchool(teacherDetails.getSchool());
+        }
+        if (teacherDetails.getSubject_name() != null) {
+            teacher.setSubject_name(teacherDetails.getSubject_name());
+        }
+
+        // Lưu thông tin Teacher
+        teacherRepository.saveAndFlush(teacher);
     }
 
     // Lấy danh sách tin nhắn của người dùng
@@ -128,7 +174,7 @@ public class UserService {
     // Lấy tin nhắn chưa đọc
     public List<Message> getUnreadMessages(String userId) {
         User user = getUserById(userId);
-        return messageRepository.findByReceiverAndIsReadOrderByTimestampAsc(user, 0);
+        return messageRepository.findByReceiverAndIsReadOrderByTimestampAsc(user, false);
     }
 
     // Tìm kiếm người nhận tin nhắn
@@ -161,7 +207,7 @@ public class UserService {
         message.setReceiver(receiver);
         message.setContent(content);
         message.setTimestamp(LocalDateTime.now());
-        message.setIsRead(0);
+        message.setIsRead(false);
         return messageRepository.save(message);
     }
     public Message saveMessage(String senderId, String  receiverId, String content) {
@@ -184,7 +230,7 @@ public class UserService {
         message.setReceiver(receiver);
         message.setContent(content);
         message.setTimestamp(LocalDateTime.now());
-        message.setIsRead(0); // Mặc định là chưa đọc
+        message.setIsRead(false); // Mặc định là chưa đọc
 
         // Lưu tin nhắn vào database
         return messageRepository.save(message);
@@ -207,7 +253,7 @@ public class UserService {
         messages.sort(Comparator.comparing(Message::getTimestamp));
 
         // Đánh dấu tất cả tin nhắn là đã đọc
-        messages.forEach(msg -> msg.setIsRead(1));
+        messages.forEach(msg -> msg.setIsRead(true));
         messageRepository.saveAll(messages);
 
         // Lấy tin nhắn mới nhất chưa có

@@ -1,66 +1,38 @@
 import React from 'react';
 
-const StudentTableHeader = () => {
-    return (
-        <thead>
-            <tr className="bg-[#f2f4f8]">
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    ID
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/6"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Họ Tên
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Giới Tính
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/6"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Ngày Sinh
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Lớp
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Trường Học
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Lớp đang dạy
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Lương/tháng
-                </th>
-                <th
-                    className="text-gray-700 text-base font-normal text-center py-2 px-4 w-1/12"
-                    style={{ fontFamily: "Roboto" }}
-                >
-                    Chỉnh sửa
-                </th>
-            </tr>
-        </thead>
-    );
+const TutorTableHeader = ({ selectedRows, handleRowSelect, teachers }) => {
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const allTeacherIds = teachers.map((teacher) => teacher.id);
+      handleRowSelect(allTeacherIds);
+    } else {
+      handleRowSelect([]);
+    }
+  };
+
+  return (
+    <thead>
+      <tr className="bg-gray-200">
+        <th className="py-2 px-4 text-left">
+          <input
+            type="checkbox"
+            checked={
+              teachers.length > 0 && selectedRows.length === teachers.length
+            }
+            onChange={handleSelectAllClick}
+          />
+        </th>
+        <th className="py-2 px-4 text-left">ID</th>
+        <th className="py-2 px-4 text-left">Tên</th>
+        <th className="py-2 px-4 text-left">Email</th>
+        <th className="py-2 px-4 text-left">Ngày sinh</th>
+        <th className="py-2 px-4 text-left">Giới tính</th>
+        <th className="py-2 px-4 text-left">Trường Đại học</th>
+        <th className="py-2 px-4 text-left">Lương/h</th>
+        <th className="py-2 px-4 text-left">Chỉnh sửa</th>
+      </tr>
+    </thead>
+  );
 };
 
-export default StudentTableHeader;
+export default TutorTableHeader;

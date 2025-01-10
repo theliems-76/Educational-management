@@ -1,83 +1,92 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
-const TutorTableRow = ({ tutor, selectedRows, handleRowSelect, handleOpenEditModal }) => {
+const TutorTableRow = ({
+  teacher,
+  selectedRows,
+  handleRowSelect,
+  handleOpenEditModal,
+}) => {
   return (
-        <tr
-            key={tutor.id}
-              className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
-            onClick={() => handleRowSelect(tutor.id)}
-             style={{
-                  backgroundColor: selectedRows.includes(tutor.id)
-                      ? "#f0f0f0"
-                      : "white",
-                }}
-       >
-          <td
-             className="text-gray-700 text-base font-normal py-2 px-4"
-             style={{ fontFamily: "Roboto" }}
-           >
-             {tutor.id}
-           </td>
-           <td
-              className="text-blue-800 text-base font-semibold py-2 px-4"
-               style={{ fontFamily: "Roboto" }}
-              >
-               {tutor.name}
-                 <div className="text-gray-500 text-sm">{tutor.phoneNumber}</div>
-             </td>
-             <td
-              className="text-gray-700 text-base font-normal py-2 px-4"
-               style={{ fontFamily: "Roboto" }}
-              >
-               {tutor.gender}
-           </td>
-            <td
-              className="text-gray-700 text-base font-normal py-2 px-4"
-               style={{ fontFamily: "Roboto" }}
-            >
-              {tutor.dateOfBirth}
-            </td>
-           <td
-               className="text-gray-700 text-base font-normal py-2 px-4"
-                style={{ fontFamily: "Roboto" }}
-            >
-               {tutor.major}
-            </td>
-            <td
-              className="text-gray-700 text-base font-normal py-2 px-4"
-                 style={{ fontFamily: "Roboto" }}
-             >
-                {tutor.school}
-             </td>
-              <td
-                 className="text-gray-700 text-base font-normal py-2 px-4"
-                style={{ fontFamily: "Roboto" }}
-                >
-                    {tutor.teachingClasses && tutor.teachingClasses.map(teachingClass => (
-                          <span key={teachingClass} className="inline-block bg-gray-200 rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-1">
-                            {teachingClass}
-                             </span>
-                           ))}
-               </td>
-                 <td
-                    className="text-gray-700 text-base font-normal py-2 px-4"
-                   style={{ fontFamily: "Roboto" }}
-                   >
-                    {tutor.hourlyRate}
-                </td>
-              <td
-                  className="text-gray-700 text-base font-normal py-2 px-4"
-                 style={{ fontFamily: "Roboto" }}
-                  >
-                   <button
-                       className = "text-blue-500 hover:underline"
-                      onClick = { () => handleOpenEditModal(tutor)}
-                  >
-                      Chỉnh sửa
-                   </button>
-              </td>
-       </tr>
-   );
+    <tr
+      key={teacher.id}
+      className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
+      onClick={() => handleRowSelect(teacher.id)}
+      style={{
+        backgroundColor: selectedRows.includes(teacher.id)
+          ? '#f0f0f0'
+          : 'white',
+      }}
+    >
+      <td className="py-2 px-4">
+        <input
+          type="checkbox"
+          checked={selectedRows.includes(teacher.id)}
+          onChange={() => handleRowSelect(teacher.id)}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        {teacher.id}
+      </td>
+      <td
+        className="text-blue-800 text-base font-semibold py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        {teacher.username}
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        {teacher.email}
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        {/* Format ngày sinh cho đẹp (ví dụ: DD/MM/YYYY) */}
+        {new Date(teacher.dob).toLocaleDateString('vi-VN')}
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        {teacher.gender}
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        {teacher.school}
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        {teacher.income}
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        <button
+          className="text-blue-500 hover:underline flex items-center"
+          onClick={(event) => {
+            event.stopPropagation();
+            handleOpenEditModal(teacher);
+          }}
+        >
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-1" />
+          Chỉnh sửa
+        </button>
+      </td>
+    </tr>
+  );
 };
 
 export default TutorTableRow;

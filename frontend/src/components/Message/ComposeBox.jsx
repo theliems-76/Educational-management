@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Popover,Box, TextField, Button, Typography, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { sendMessage } from '../../apis/messageApi';
 const StyledHeaderBox = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -62,75 +63,97 @@ const StyledButtonBox = styled(Box)(({ theme }) => ({
 
 const ComposeBox = ({ isOpen, onClose, onSendMessage }) => {
     const [newMessage, setNewMessage] = useState({
-        recipient: '',
-        content: '',
+      receiverId: '', // Thêm receiverId
+      content: '',
     });
-
-    if (!isOpen) {
-        return null;
-    }
-
+  
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setNewMessage({
-            ...newMessage,
-            [name]: value,
-        });
+      const { name, value } = event.target;
+      setNewMessage({ ...newMessage, [name]: value });
     };
-
-    const handleSendMessage = () => {
-        onSendMessage(newMessage);
-        onClose();
+  
+    const handleSendMessage = async () => {
+      try {
+        // Thêm receiverId vào message
+        await sendMessage(newMessage.receiverId, newMessage.content); // Sửa lại
+        onSendMessage({ ...newMessage, senderName: 'me' }); // Cập nhật giao diện (nếu cần)
+        setNewMessage({ receiverId: '', content: '' }); // Reset form
+        onClose(); // Đóng ComposeBox
+      } catch (error) {
+        console.error('Lỗi khi gửi tin nhắn:', error);
+        // Xử lý lỗi, hiển thị thông báo, v.v.
+      }
     };
-
+  
+    if (!isOpen) {
+      return null;
+    }
+  
     return (
-        <ComposeBoxWrapper>
-            <StyledHeaderBox>
-                <Typography variant="h6" component="div" sx={{ fontWeight: 600,color: '#242426', fontSize: '0.875rem', fontFamily: 'Inter' }} flexGrow={1} align="left">
-                    Soạn tin mới
-                </Typography>
-                <IconButton onClick={onClose} sx={{ padding: 0 }}>
-                    <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#242426' }}>X</span>
-                </IconButton>
-            </StyledHeaderBox>
-            <Box sx={{ padding: '1rem' }}>
-                    Gửi đến ai:
-                
-                <StyledTextField
-    variant="outlined"
-    name='recipient'
-    value={newMessage.recipient}
-    onChange={handleInputChange}
-    fullWidth
-    sx={{
-        '& .MuiOutlinedInput-root': {
-            backgroundColor: '#e1e1e1',
-        },
-    }}
-/>
-  Nội dung tin nhắn:
-<StyledTextField
-    variant="outlined"
-    name='content'
-    value={newMessage.content}
-    onChange={handleInputChange}
-    multiline
-    rows={4}
-    fullWidth
-     sx={{
-        '& .MuiOutlinedInput-root': {
-            backgroundColor: '#e1e1e1',
-        },
-    }}
-/>
-                <StyledButtonBox>
-                    <Button variant="contained" color="primary" onClick={handleSendMessage} sx={{ textTransform: 'capitalize' }}>
-                        Gửi
-                    </Button>
-                </StyledButtonBox>
-            </Box>
-        </ComposeBoxWrapper>
+      <ComposeBoxWrapper>
+        <StyledHeaderBox>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              fontWeight: 600,
+              color: '#242426',
+              fontSize: '0.875rem',
+              fontFamily: 'Inter',
+            }}
+            flexGrow={1}
+            align="left"
+          >
+            Soạn tin mới
+          </Typography>
+          <IconButton onClick={onClose} sx={{ padding: 0 }}>
+            <span style={{ fontSize: '24px', fontWeight: 'bold', color: '#242426' }}>
+              X
+            </span>
+          </IconButton>
+        </StyledHeaderBox>
+        <Box sx={{ padding: '1rem' }}>
+          <Typography>Gửi đến (ID):</Typography>
+          <StyledTextField
+            variant="outlined"
+            name="receiverId"
+            value={newMessage.receiverId}
+            onChange={handleInputChange}
+            fullWidth
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: '#e1e1e1',
+              },
+            }}
+          />
+          <Typography>Nội dung tin nhắn:</Typography>
+          <StyledTextField
+            variant="outlined"
+            name="content"
+            value={newMessage.content}
+            onChange={handleInputChange}
+            multiline
+            rows={4}
+            fullWidth
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: '#e1e1e1',
+              },
+            }}
+          />
+          <StyledButtonBox>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSendMessage}
+              sx={{ textTransform: 'capitalize' }}
+            >
+              Gửi
+            </Button>
+          </StyledButtonBox>
+        </Box>
+      </ComposeBoxWrapper>
     );
-};
-
-export default ComposeBox;
+  };
+  
+  export default ComposeBox;

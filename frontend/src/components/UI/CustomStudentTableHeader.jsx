@@ -1,57 +1,39 @@
 import React from 'react';
 
-const CustomStudentTableHeader = () => {
-  return (
-    <thead>
-      <tr className="bg-[#f2f4f8]">
-        <th className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12">
-          <input type="checkbox" disabled /> {/* Ô checkbox header để disabled */}
-        </th>
-        <th
-          className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          ID
-        </th>
-        <th
-          className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/6"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          Họ Tên
-        </th>
-        <th
-          className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          Giới Tính
-        </th>
-        <th
-          className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/6"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          Ngày Sinh
-        </th>
-        <th
-          className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          Lớp
-        </th>
-        <th
-          className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          Trường Học
-        </th>
-        <th
-          className="text-gray-700 text-base font-normal text-left py-2 px-4 w-1/12"
-          style={{ fontFamily: 'Roboto' }}
-        >
-          Lớp học thêm
-        </th>
-      </tr>
-    </thead>
-  );
-};
-
-export default CustomStudentTableHeader;
+const CustomStudentTableHeader = ({ selectedRows, handleRowSelect, students }) => {
+    const handleSelectAllClick = (event) => {
+        if (event.target.checked) {
+          const allStudentIds = students.map((student) => student.idStudent);
+          handleRowSelect(allStudentIds);
+        } else {
+          handleRowSelect([]);
+        }
+      };
+    
+      return (
+        <thead>
+          <tr className="bg-gray-200">
+            <th className="py-2 px-4 text-left">
+              <input
+                type="checkbox"
+                checked={
+                  students.length > 0 && selectedRows.length === students.length
+                }
+                onChange={handleSelectAllClick}
+              />
+            </th>
+            <th className="py-2 px-4 text-left">ID</th>
+            <th className="py-2 px-4 text-left">Tên đăng nhập</th>
+            <th className="py-2 px-4 text-left">Email</th>
+            <th className="py-2 px-4 text-left">Giới tính</th>
+            <th className="py-2 px-4 text-left">Ngày sinh</th>
+            <th className="py-2 px-4 text-left">Lớp</th>
+            <th className="py-2 px-4 text-left">Trường học</th>
+            <th className="py-2 px-4 text-left">Lớp học thêm</th>
+            <th className="py-2 px-4 text-left">Hành động</th>
+          </tr>
+        </thead>
+      );
+    };
+    
+    export default CustomStudentTableHeader;

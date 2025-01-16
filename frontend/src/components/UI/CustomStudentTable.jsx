@@ -2,18 +2,19 @@ import React from 'react';
 import CustomStudentTableHeader from './CustomStudentTableHeader';
 import CustomStudentTableRow from './CustomStudentTableRow';
 
-const CustomStudentTable = ({ students, selectedRows, handleRowSelect }) => {
+const CustomStudentTable = ({ students, selectedRows, handleRowSelect, handleOpenEditModal }) => {
   return (
     <div className="overflow-auto max-h-[400px] min-w-full">
       <table className="w-full">
-        <CustomStudentTableHeader />
+        <CustomStudentTableHeader selectedRows={selectedRows} handleRowSelect={handleRowSelect} students={students} />
         <tbody>
           {students.map((student) => (
             <CustomStudentTableRow
-              key={student.id}
+              key={student.idStudent}
               student={student}
               selectedRows={selectedRows}
               handleRowSelect={handleRowSelect}
+              handleOpenEditModal={handleOpenEditModal}
             />
           ))}
         </tbody>

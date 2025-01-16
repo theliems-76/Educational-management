@@ -1,37 +1,47 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 
-const CustomStudentTableRow = ({ student, selectedRows, handleRowSelect }) => {
-  const isSelected = selectedRows.includes(student.id);
-
-  const handleCheckboxChange = (event) => {
-    event.stopPropagation(); // Ngăn chặn click vào checkbox kích hoạt onClick của cả hàng
-    handleRowSelect(student.id);
-  };
-
+const CustomStudentTableRow = ({
+  student,
+  selectedRows,
+  handleRowSelect,
+  handleOpenEditModal,
+}) => {
   return (
     <tr
-      key={student.id}
-      className="border-b border-gray-200 hover:bg-gray-100"
+      key={student.idStudent}
+      className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
+      onClick={() => handleRowSelect(student.idStudent)}
+      style={{
+        backgroundColor: selectedRows.includes(student.idStudent)
+          ? '#f0f0f0'
+          : 'white',
+      }}
     >
-      <td className="text-gray-700 text-base font-normal py-2 px-4 w-1/12">
+      <td className="py-2 px-4">
         <input
           type="checkbox"
-          checked={isSelected}
-          onChange={handleCheckboxChange}
+          checked={selectedRows.includes(student.idStudent)}
+          onChange={() => handleRowSelect(student.idStudent)}
+          onClick={(e) => e.stopPropagation()}
         />
       </td>
       <td
         className="text-gray-700 text-base font-normal py-2 px-4"
         style={{ fontFamily: 'Roboto' }}
       >
-        {student.id}
+        {student.idStudent}
       </td>
       <td
         className="text-blue-800 text-base font-semibold py-2 px-4"
         style={{ fontFamily: 'Roboto' }}
       >
-        {student.name}
-        <div className="text-gray-500 text-sm">{student.phoneNumber}</div>
+        {student.user.username}
+        <div className="text-gray-500 text-sm">{student.user.phone}</div>
+      </td>
+      <td className="text-gray-700 text-base font-normal py-2 px-4" style={{ fontFamily: 'Roboto' }}>
+        {student.user.email}
       </td>
       <td
         className="text-gray-700 text-base font-normal py-2 px-4"
@@ -43,13 +53,13 @@ const CustomStudentTableRow = ({ student, selectedRows, handleRowSelect }) => {
         className="text-gray-700 text-base font-normal py-2 px-4"
         style={{ fontFamily: 'Roboto' }}
       >
-        {student.dateOfBirth}
+        {student.dob}
       </td>
       <td
         className="text-gray-700 text-base font-normal py-2 px-4"
         style={{ fontFamily: 'Roboto' }}
       >
-        {student.grade}
+        {student.classOfSchool}
       </td>
       <td
         className="text-gray-700 text-base font-normal py-2 px-4"
@@ -61,15 +71,30 @@ const CustomStudentTableRow = ({ student, selectedRows, handleRowSelect }) => {
         className="text-gray-700 text-base font-normal py-2 px-4"
         style={{ fontFamily: 'Roboto' }}
       >
-        {student.extraClasses &&
-          student.extraClasses.map((extraClass) => (
+        {student.classStudents &&
+          student.classStudents.map((extraClass, index) => (
             <span
-              key={extraClass}
+              key={index}
               className="inline-block bg-gray-200 rounded-full px-2 py-1 text-sm font-semibold text-gray-700 mr-2 mb-1"
             >
               {extraClass}
             </span>
           ))}
+      </td>
+      <td
+        className="text-gray-700 text-base font-normal py-2 px-4"
+        style={{ fontFamily: 'Roboto' }}
+      >
+        <button
+          className="text-blue-500 hover:underline flex items-center"
+          onClick={(event) => {
+            event.stopPropagation();
+            handleOpenEditModal(student);
+          }}
+        >
+          <FontAwesomeIcon icon={faPenToSquare} className="mr-1" />
+          Chỉnh sửa
+        </button>
       </td>
     </tr>
   );

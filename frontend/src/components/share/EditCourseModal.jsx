@@ -1,239 +1,277 @@
 import React, { useState, useEffect } from 'react';
 import {
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    Checkbox,
-    ListItemText,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  TextField,
+  Button,
+  Grid,
+  Typography,
+  Checkbox,
+  ListItemText,
+  Box,
 } from '@mui/material';
+import { TimePicker } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { format, parse } from 'date-fns';
+import { vi } from 'date-fns/locale';
+import { getTutors } from '../../apis/teacherApi';
 
-const EditCourseModal = ({ isModalOpen, handleCloseModal, handleEditSubmit, handleChange, editCourse, notification, notificationType, notificationError, tutors, setNotification, setNotificationType, setNotificationError }) => {
-    const daysOfWeek = [
-        'Thứ 2 - 8:00 AM',
-        'Thứ 2 - 10:00 AM',
-        'Thứ 2 - 2:00 PM',
-        'Thứ 2 - 4:00 PM',
-        'Thứ 3 - 8:00 AM',
-        'Thứ 3 - 10:00 AM',
-        'Thứ 3 - 2:00 PM',
-        'Thứ 3 - 4:00 PM',
-        'Thứ 4 - 8:00 AM',
-        'Thứ 4 - 10:00 AM',
-        'Thứ 4 - 2:00 PM',
-        'Thứ 4 - 4:00 PM',
-        'Thứ 5 - 8:00 AM',
-        'Thứ 5 - 10:00 AM',
-        'Thứ 5 - 2:00 PM',
-        'Thứ 5 - 4:00 PM',
-        'Thứ 6 - 8:00 AM',
-        'Thứ 6 - 10:00 AM',
-        'Thứ 6 - 2:00 PM',
-        'Thứ 6 - 4:00 PM',
-        'Thứ 7 - 8:00 AM',
-        'Thứ 7 - 10:00 AM',
-        'Thứ 7 - 2:00 PM',
-        'Thứ 7 - 4:00 PM',
-    ];
-    const [formData, setFormData] = useState({
-        className: '',
-        teacher: '',
-        classSize: '',
-        tuitionFee: '',
-        schedule: [],
-    });
+const EditCourseModal = ({
+  isModalOpen,
+  handleCloseModal,
+  handleEditSubmit,
+  editCourse,
+  notification,
+  notificationType,
+  notificationError,
+}) => {
+  const daysOfWeek = [
+    'Thứ 2',
+    'Thứ 3',
+    'Thứ 4',
+    'Thứ 5',
+    'Thứ 6',
+    'Thứ 7',
+  ];
 
-    const [startDate, setStartDate] = useState('');
+  const [formData, setFormData] = useState({
+    className: '',
+    teacherId: '',
+    classSize: 0,
+    tuitionFee: '',
+    schedule: [],
+    startDate: '',
+  });
 
-    useEffect(() => {
-        if (editCourse) {
-            setFormData({
-                className: editCourse.className || '',
-                teacher: editCourse.teacher || '',
-                classSize: editCourse.classSize || '',
-                tuitionFee: editCourse.tuitionFee || '',
-                 schedule: Array.isArray(editCourse.schedule) ? editCourse.schedule.map(String) : [],
-            });
+  const [selectedDates, setSelectedDates] = useState({});
+  const [tutors, setTutors] = useState([]);
 
-            setStartDate(editCourse.startDate || '');
-
-        }
-    }, [editCourse]);
-      const handleFormChange = (event) => {
-        const { name, value } = event.target;
-         setFormData(prev => {
-              if(name === 'schedule'){
-                    return {...prev, [name]: Array.isArray(value) ? value : []};
-                }
-                 if (name === 'classSize' && value < 0) {
-                return { ...prev, [name]: 0 };
-            }
-                 return {...prev, [name]: value};
-          });
-
-          if (name === 'startDate') {
-            setStartDate(value); // Update startDate state
-        }
-     };
-     const handleFormSubmit = (event) => {
-        event.preventDefault();
-         handleEditSubmit({ ...editCourse, ...formData, startDate });
-     };
-
-         setNotification("Đã chỉnh sửa lớp học thành công!");
-         setNotificationType("edit");
-        setTimeout(() => {
-        cation('');
-            setNotificationType('');
-            setNotificationError('');
-            handleCloseModal();
-         }, 1000);
+  useEffect(() => {
+    const fetchTutors = async () => {
+      try {
+        const tutorsData = await getTutors();
+        setTutors(tutorsData);
+      } catch (error) {
+        console.error('Lỗi khi lấy danh sách giáo viên:', error);
+      }
     };
 
-    return (
-        <div
-            className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50
-             ${isModalOpen ? "block" : "hidden"}`}
-        >
-            <div className="bg-white p-8 rounded shadow-lg w-3/5 relative">
-                <h2 className="text-2xl font-bold mb-4">Chỉnh Sửa Lớp Học</h2>
-                {notificationError && notificationType === "edit" && (
-                    <div className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md mb-4" role="alert">
-                        <div className="flex">
-                            <div>
-                                <p className="text-sm">{notificationError}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {/* Hiển thị thông báo từ component cha (nếu có) */}
-                {notification && notificationType === "edit" && (
-                    <div className="bg-green-100 border-t-4 border-green-500 rounded-b text-green-900 px-4 py-3 shadow-md mb-4" role="alert">
-                        <div className="flex">
-                            <div>
-                                <p className="text-sm">{notification}</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-                <form onSubmit={handleFormSubmit} className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label htmlFor="className" className="block text-sm font-medium text-gray-700">Tên Lớp</label>
-                        <input
-                            type="text"
-                            id="className"
-                            className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                            name="className"
-                            value={formData.className}
-                            onChange={handleFormChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <FormControl fullWidth>
-                            <InputLabel id="teacher-label" className="text-sm font-medium text-gray-700">Giáo Viên</InputLabel>
-                            <Select
-                                labelId="teacher-label"
-                                id="teacher"
-                                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                                name="teacher"
-                                value={formData.teacher}
-                                onChange={handleFormChange}
-                                label="Giáo Viên"
-                                required
-                            >
-                                <MenuItem value="" disabled>
-                                    Chọn giáo viên
-                                </MenuItem>
-                                {tutors && tutors.map(tutor => (
-                                    <MenuItem key={tutor.id} value={tutor.id}>
-                                        {tutor.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <div>
-                        <label htmlFor="classSize" className="block text-sm font-medium text-gray-700">Sĩ số</label>
-                        <input
-                            type="number"
-                            id="classSize"
-                            className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                            name="classSize"
-                            value={formData.classSize}
-                            onChange={handleFormChange}
-                            required
-                            min="0"
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="tuitionFee" className="block text-sm font-medium text-gray-700">Học phí / tháng</label>
-                        <input
-                            type="text"
-                            id="tuitionFee"
-                            className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                            name="tuitionFee"
-                            value={formData.tuitionFee}
-                            onChange={handleFormChange}
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="schedule" className="block text-sm font-medium text-gray-700">Lịch học</label>
-                        <FormControl fullWidth>
-                            <Select
-                                labelId="schedule-label"
-                                id="schedule"
-                                className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                                multiple
-                                value={formData.schedule}
-                                onChange={handleFormChange}
-                                renderValue={(selected) => selected.join(', ')}
-                                name="schedule"
-                                required
-                            >
-                                {daysOfWeek.map((day) => (
-                                    <MenuItem key={day} value={day}>
-                                        <Checkbox checked={formData.schedule.indexOf(day) > -1} />
-                                        <ListItemText primary={day} />
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <div>
-                        <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">
-                        Ngày Bắt Đầu
-                        </label>
-                        <input
-                        type="date"
-                        id="startDate"
-                        className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
-                        name="startDate"
-                        value={startDate}
-                        onChange={handleFormChange}
-                        required
-                        />
-                    </div>
+    fetchTutors();
+  }, []);
 
-                    <div className="col-span-2 flex justify-end">
-                        <button
-                            type="button"
-                            className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
-                            onClick={handleCloseModal}
-                        >
-                            Hủy
-                        </button>
-                        <button
-                            type="submit"
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                            Thay Đổi
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+  useEffect(() => {
+    if (editCourse) {
+      setFormData({
+        className: editCourse.className || '',
+        teacherId: editCourse.teacherId || '',
+        classSize: editCourse.classSize || 0,
+        tuitionFee: editCourse.tuitionFee || '',
+        schedule: editCourse.schedule || [],
+        startDate: editCourse.startDate || '',
+      });
+
+      const initialDates = {};
+      if (Array.isArray(editCourse.schedule)) {
+        editCourse.schedule.forEach((item) => {
+          initialDates[item.dayOfWeek] = item.startTime
+            ? parse(item.startTime, 'HH:mm', new Date())
+            : null;
+        });
+      }
+      setSelectedDates(initialDates);
+    }
+  }, [editCourse]);
+
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleDateChange = (date, dayOfWeek) => {
+    setSelectedDates((prev) => ({
+      ...prev,
+      [dayOfWeek]: date,
+    }));
+  };
+
+  const handleTimeChange = (dayOfWeek, field) => (time) => {
+    setFormData((prev) => {
+      const existingSchedule = prev.schedule.find(
+        (item) => item.dayOfWeek === dayOfWeek
+      );
+      const newSchedule = existingSchedule
+        ? {
+            ...existingSchedule,
+            [field]: time ? format(time, 'HH:mm') : null,
+          }
+        : { dayOfWeek, startTime: null, endTime: null, [field]: time };
+
+      const updatedSchedule = prev.schedule.filter(
+        (item) => item.dayOfWeek !== dayOfWeek
+      );
+      return {
+        ...prev,
+        schedule: [...updatedSchedule, newSchedule],
+      };
+    });
+  };
+
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const scheduleWithFormattedTimes = formData.schedule.map((item) => ({
+      ...item,
+      startTime: item.startTime ? format(item.startTime, 'HH:mm') : null,
+      endTime: item.endTime ? format(item.endTime, 'HH:mm') : null,
+    }));
+
+    const updatedCourse = {
+      ...editCourse,
+      ...formData,
+      schedule: scheduleWithFormattedTimes,
+    };
+
+    handleEditSubmit(updatedCourse);
+    handleCloseModal();
+  };
+
+  return (
+    <div
+      className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50 ${
+        isModalOpen ? 'block' : 'hidden'
+      }`}
+    >
+      <div className="bg-white p-8 rounded shadow-lg w-4/5 max-w-4xl relative">
+        <h2 className="text-2xl font-bold mb-4">Chỉnh Sửa Lớp Học</h2>
+        {/* ... (hiển thị thông báo) ... */}
+        <form onSubmit={handleFormSubmit} className="grid grid-cols-2 gap-4">
+          <div>
+            <TextField
+              fullWidth
+              label="Tên Lớp"
+              name="className"
+              value={formData.className}
+              onChange={handleFormChange}
+              margin="normal"
+              required
+            />
+          </div>
+          <div>
+            <FormControl fullWidth margin="normal">
+              <InputLabel id="teacherId-label">Giáo Viên</InputLabel>
+              <Select
+                labelId="teacherId-label"
+                id="teacherId"
+                name="teacherId"
+                value={formData.teacherId}
+                onChange={handleFormChange}
+                label="Giáo Viên"
+                required
+              >
+                {tutors.map((tutor) => (
+                  <MenuItem key={tutor.id} value={tutor.id}>
+                    {tutor.user.username}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div>
+            <TextField
+              fullWidth
+              label="Sĩ số"
+              name="classSize"
+              type="number"
+              value={formData.classSize}
+              onChange={handleFormChange}
+              margin="normal"
+              required
+              inputProps={{ min: 0 }}
+            />
+          </div>
+          <div>
+            <TextField
+              fullWidth
+              label="Học phí / tháng"
+              name="tuitionFee"
+              value={formData.tuitionFee}
+              onChange={handleFormChange}
+              margin="normal"
+              required
+            />
+          </div>
+          <div className="col-span-2">
+            <Typography variant="subtitle1" gutterBottom>
+              Lịch học
+            </Typography>
+            <Grid container spacing={2}>
+              {daysOfWeek.map((dayOfWeek) => (
+                <Grid item xs={12} sm={4} key={dayOfWeek}>
+                  <Typography variant="subtitle2">{dayOfWeek}</Typography>
+                  <LocalizationProvider
+                    dateAdapter={AdapterDateFns}
+                    locale={vi}
+                  >
+                    <Box display="flex" alignItems="center" gap={1}>
+                      <TimePicker
+                        label="Bắt đầu"
+                        value={
+                          formData.schedule.find(
+                            (s) => s.dayOfWeek === dayOfWeek
+                          )?.startTime || null
+                        }
+                        onChange={handleTimeChange(dayOfWeek, 'startTime')}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                      <TimePicker
+                        label="Kết thúc"
+                        value={
+                          formData.schedule.find(
+                            (s) => s.dayOfWeek === dayOfWeek
+                          )?.endTime || null
+                        }
+                        onChange={handleTimeChange(dayOfWeek, 'endTime')}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </Box>
+                  </LocalizationProvider>
+                </Grid>
+              ))}
+            </Grid>
+          </div>
+          <div>
+            <TextField
+              fullWidth
+              label="Ngày bắt đầu"
+              type="date"
+              name="startDate"
+              value={formData.startDate}
+              onChange={handleFormChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+            />
+          </div>
+          <div className="col-span-2 flex justify-end">
+            <Button
+              onClick={handleCloseModal}
+              variant="outlined"
+              color="secondary"
+              sx={{ mr: 2 }}
+            >
+              Hủy
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Cập nhật
+            </Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 export default EditCourseModal;

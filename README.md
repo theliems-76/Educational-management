@@ -61,15 +61,6 @@ Hệ thống phân chia chức năng theo vai trò người dùng:
 *   **Authentication:** JWT (JSON Web Token)
 *   **Principles:** Object-Oriented Programming (OOP), MVC Pattern
 
-## Hình ảnh giao diện (Screenshots)
-
-*(Bạn nên thêm một vài ảnh chụp màn hình các giao diện chính vào đây hoặc tạo một thư mục `screenshots`)*
-
-Ví dụ:
-![Trang Đăng nhập](path/to/login-screenshot.png)
-![Trang Profile Học viên](path/to/student-profile-screenshot.png)
-![Trang Quản lý Lớp học (Admin)](path/to/admin-class-management-screenshot.png)
-
 ## Cài đặt và Chạy dự án
 
 **Yêu cầu:**
@@ -124,4 +115,4 @@ Ví dụ:
 
 Để xem chi tiết về phân tích yêu cầu và thiết kế hệ thống, vui lòng tham khảo báo cáo đầy đủ dưới dạng PDF:
 
-*   [Báo cáo Đồ án Cuối kỳ - Website Quản lý Trung tâm Dạy học](./report (1).pdf)
+*   [Báo cáo Đồ án Cuối kỳ - Website Quản lý Trung tâm Dạy học] (./report (1).pdf)
